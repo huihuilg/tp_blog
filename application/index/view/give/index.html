@@ -1,0 +1,25 @@
+{include file='public/header' /}
+<div class="pagebg ab"> </div>
+<div class="container">
+    <h1 class="t_nav"><span>你，我生命中一个重要的过客，我们之所以是过客，因为你未曾会为我停留。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">打赏</a></h1>
+    <div class="news_infos">
+        <div style="text-align: center;">
+            <img style="width:270px;height: 420px; margin: 0 auto;" src="/static/images/pay.jpg">
+        </div>
+    </div>
+    <div class="sidebar">
+        <div class="about">
+            <p class="avatar"> <img src="{$userInfo.avatar}" alt=""> </p>
+            <p class="abname">{$userInfo.name}</p>
+            <p class="abposition">{$userInfo.profession}</p>
+            <p class="abtext"> {$userInfo.intro} </p>
+        </div>
+        <!--<div class="weixin">-->
+            <!--<h2 class="hometitle">微信关注</h2>-->
+            <!--<ul>-->
+                <!--<img src="images/wx.jpg">-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+{include file='public/foot' /}

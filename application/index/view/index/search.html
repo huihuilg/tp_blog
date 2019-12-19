@@ -1,0 +1,116 @@
+{include file='public/header' /}
+<div class="pagebg sh"></div>
+<div class="container">
+    <h1 class="t_nav"><span>不要轻易放弃。学习成长的路上，我们长路漫漫，只因学无止境。 </span><a href="/" class="n1">网站首页</a></h1>
+    <!--blogsbox begin-->
+    <div class="blogsbox">
+        {foreach $learnInfo as $val}
+        <div class="blogs" data-scroll-reveal="enter bottom over 1s" >
+            <h3 class="blogtitle"><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if} target="_blank">{$val.title}</a></h3>
+            <span class="blogpic"><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if} title=""><img src="{$val.pic_url}" alt=""></a></span>
+            <div class="blogtext" style="height: 68px;">
+                <?=html_entity_decode($val['content'])?>...
+            </div>
+            <div class="bloginfo">
+                <ul>
+                    <li class="author">{$val.nickname}</li>
+                    <li class="lmname">{if $val.m_id==2}学无止境{elseif $val.m_id==3}慢生活{/if}</li>
+                    <li class="timer">{$val.create_time}</li>
+                    <li class="view"><span>{$val.page_view}</span>已阅读</li>
+                    <li class="like">{$val.like_num}</li>
+                </ul>
+            </div>
+        </div>
+        {/foreach}
+        <div id="test1" style="margin:10px auto; text-align:center;"></div>
+
+    </div>
+    <!--blogsbox end-->
+    <div class="sidebar">
+        <div class="zhuanti">
+            <h2 class="hometitle">特别推荐</h2>
+            <ul>
+                {foreach $result as $val}
+                <li> <i><img style="height: 200px;" src="{$val.pic_url}"></i>
+                    <p>{$val.title} <span><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if}>阅读</a></span> </p>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        <div class="tuijian">
+            <h2 class="hometitle">推荐文章</h2>
+            <ul class="sidenews">
+                {foreach $recommend as $val}
+                <li> <i><img src="{$val.pic_url}"></i>
+                    <p><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if}>{$val.title}</a></p>
+                    <span>{$val.create_time}</span> </li>
+                {/foreach}
+            </ul>
+        </div>
+        <div class="tuijian">
+            <h2 class="hometitle">点击排行</h2>
+            <ul class="sidenews">
+                {foreach $clickTop as $val}
+                <li> <i><img src="{$val.pic_url}"></i>
+                    <p><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if}>{$val.title}</a></p>
+                    <span>{$val.create_time}</span> </li>
+                {/foreach}
+            </ul>
+        </div>
+        <!--<div class="cloud">-->
+        <!--<h2 class="hometitle">标签云</h2>-->
+        <!--<ul>-->
+        <!--<a href="/static//">陌上花开</a> <a href="/static//">校园生活</a> <a href="/static//">html5</a> <a href="/static//">SumSung</a> <a href="/static//">青春</a> <a href="/static//">温暖</a> <a href="/static//">阳光</a> <a href="/static//">三星</a><a href="/static//">索尼</a> <a href="/static//">华维荣耀</a> <a href="/static//">三星</a> <a href="/static//">索尼</a>-->
+        <!--</ul>-->
+        <!--</div>-->
+
+        <<div class="guanzhu" id="follow-us">
+        <h2 class="hometitle">关注我们 么么哒！</h2>
+        <!--<ul>-->
+        <!--<li class="sina"><a href="/static//" target="_blank"><span>新浪微博</span>杨青博客</a></li>-->
+        <!--<li class="tencent"><a href="/static//" target="_blank"><span>腾讯微博</span>杨青博客</a></li>-->
+        <!--<li class="qq"><a href="/static//" target="_blank"><span>QQ号</span>476847113</a></li>-->
+        <!--<li class="email"><a href="/static//" target="_blank"><span>邮箱帐号</span>dancesmiling@qq.com</a></li>-->
+        <!--<li class="wxgzh"><a href="/static//" target="_blank"><span>微信号</span>yangqq_1987</a></li>-->
+        <!--<li class="wx"><img src="/static/images/wx.jpg"></li>-->
+        <!--</ul>-->
+    </div>
+    </div>
+</div>
+<script>
+    //分页
+    layui.use('laypage', function(){
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+            ,count: {$counts} //数据总数，从服务端得到
+            ,curr:{$page}
+            // ,limits: [10,20]
+            ,limit: {$num}
+            ,group:5
+            ,jump: function (obj,first) {
+                //首次不执行
+                if(!first){
+                    //do something
+                    searchs(obj.curr,obj.limit);
+                }
+            }
+        });
+    });
+    //搜索
+    function searchs(curpage,num) {
+        // var search = $.trim($('#search').val())//获取搜索内容
+        var url = "/index/learn/index?page="+curpage;
+        // if(search){
+        //     url += '&search=' + search;//拼接
+        // }
+        if(num){
+            url += '&num=' + num;//拼接
+        }
+        window.location.href = url;//跳转
+    }
+</script>
+{include file='public/foot' /}

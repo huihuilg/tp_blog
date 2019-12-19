@@ -1,0 +1,34 @@
+{include file='public/header' /}
+<div class="pagebg ab"> </div>
+<div class="container">
+    <h1 class="t_nav"><span>像“草根”一样，紧贴着地面，低调的存在，冬去春来，枯荣无恙。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">关于我</a></h1>
+    <div class="news_infos">
+        <ul>
+           <?=html_entity_decode($userInfo['content'])?>
+            <br />
+            <br />
+            <h2>About my blog</h2>
+            &nbsp;
+            <p>域 名：sunny.huihuil.cn&nbsp;</p>
+            <br />
+            <p>服务器：阿里云服务器&nbsp;&nbsp;<a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=8smrzoqa&amp;productCode=vm" target="_blank"><span style="color:#FF0000;"><strong>前往阿里云官网购买&gt;&gt;</strong></span></a></p>
+            <br />
+            <p>备案号：{$userInfo.internet_num}</p>
+        </ul>
+    </div>
+    <div class="sidebar">
+        <div class="about">
+            <p class="avatar"> <img src="{$userInfo.avatar}" alt=""> </p>
+            <p class="abname">{$userInfo.name}</p>
+            <p class="abposition">{$userInfo.profession}</p>
+            <p class="abtext"> {$userInfo.intro} </p>
+        </div>
+        <!--<div class="weixin">-->
+            <!--<h2 class="hometitle">微信关注</h2>-->
+            <!--<ul>-->
+                <!--<img src="images/wx.jpg">-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+{include file='public/foot' /}

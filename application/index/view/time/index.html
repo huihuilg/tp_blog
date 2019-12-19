@@ -1,0 +1,53 @@
+{include file='public/header' /}
+<div class="pagebg timer"> </div>
+<div class="container">
+    <h1 class="t_nav"><span>时光飞逝，机会就在我们眼前，何时找到了灵感，就要把握机遇，我们需要智慧和勇气去把握机会。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">时间轴</a></h1>
+    <div class="timebox">
+        <ul id="list" style="">
+            {foreach $timeInfo as $val}
+            <li><span>{$val.create_time}</span><a href="" title="">{$val.title}</a></li>
+            {/foreach}
+        </ul>
+        <!--<ul id="list2">-->
+        <!--</ul>-->
+        <!--<script src="/static/js/page2.js"></script>-->
+    </div>
+    <div id="test1" style="margin:10px auto; text-align:center;"></div>
+</div>
+<script>
+    //分页
+    layui.use('laypage', function(){
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+            ,count: {$counts} //数据总数，从服务端得到
+            ,curr:{$page}
+            // ,limits: [1,5,10,20]
+            ,limit: {$num}
+            ,group:5
+            ,jump: function (obj,first) {
+                //首次不执行
+                if(!first){
+                    //do something
+                    searchs(obj.curr,obj.limit);
+                }
+            }
+        });
+    });
+    //搜索
+    function searchs(curpage,num) {
+        // var search = $.trim($('#search').val())//获取搜索内容
+        var url = "/index/time/index?page="+curpage;
+        // if(search){
+        //     url += '&search=' + search;//拼接
+        // }
+        if(num){
+            url += '&num=' + num;//拼接
+        }
+        window.location.href = url;//跳转
+    }
+</script>
+{include file='public/foot' /}

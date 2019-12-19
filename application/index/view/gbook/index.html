@@ -1,0 +1,33 @@
+{include file='public/header' /}
+<div class="pagebg ab"> </div>
+<div class="container">
+    <h1 class="t_nav"><span>你，我生命中一个重要的过客，我们之所以是过客，因为你未曾会为我停留。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">留言</a></h1>
+    <!--<div class="news_infos">-->
+    <!--    <ul>-->
+            <!--PC版-->
+    <!--        <div id="SOHUCS" sid="0"></div>-->
+    <!--        <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>-->
+    <!--        <script type="text/javascript">-->
+    <!--        window.changyan.api.config({-->
+    <!--        appid: 'cyu2fTaT3',-->
+    <!--        conf: 'prod_e95cbf1790ec5c920cb8c5a9c74a2263'-->
+    <!--        });-->
+    <!--        </script>-->
+    <!--    </ul>-->
+    <!--</div>-->
+    <div class="sidebar">
+        <div class="about">
+            <p class="avatar"> <img src="{$userInfo.avatar}" alt=""> </p>
+            <p class="abname">{$userInfo.name}</p>
+            <p class="abposition">{$userInfo.profession}</p>
+            <p class="abtext"> {$userInfo.intro} </p>
+        </div>
+        <!--<div class="weixin">-->
+            <!--<h2 class="hometitle">微信关注</h2>-->
+            <!--<ul>-->
+                <!--<img src="images/wx.jpg">-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+</div>
+{include file='public/foot' /}

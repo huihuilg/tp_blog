@@ -1,0 +1,73 @@
+{include file='public/header' /}
+<body class="login-bg">
+    
+    <div class="login layui-anim layui-anim-up">
+        <div class="message">博客-后台管理登录</div>
+        <div id="darkbannerwrap"></div>
+        
+        <form method="post" class="layui-form" >
+            <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <hr class="hr15">
+            <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <hr class="hr15">
+            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <hr class="hr20" >
+        </form>
+    </div>
+
+    <script>
+        $(function  () {
+            layui.use('form', function(){
+              var form = layui.form;
+              // layer.msg('玩命卖萌中', function(){
+              //   //关闭后的操作
+              //   });
+              //监听提交
+              form.on('submit(login)', function(data){
+                  //loading层
+                  var index = layer.load(1, {
+                      shade: [0.1,'#1045FF'] //0.1透明度的白色背景
+                  });
+                  $.ajax({
+                      url:'/admin/login/login',
+                      type:'post',
+                      data:data.field,
+                      success:function(res){
+                          if(res ==1){
+                              location.href='/admin/index/index.html';
+                          }else{
+                              layer.msg('用户名或密码错误',function(){
+
+                              });
+                          }
+                          layer.close(index);
+                      },
+                      error:function (res) {
+                          layer.msg('用户名或密码错误',function(){
+
+                          });
+                          layer.close(index);
+                      }
+                  })
+                return false;
+              });
+            });
+        })
+
+        
+    </script>
+
+    
+    <!-- 底部结束 -->
+    <!--<script>-->
+    <!--//百度统计可去掉-->
+    <!--var _hmt = _hmt || [];-->
+    <!--(function() {-->
+      <!--var hm = document.createElement("script");-->
+      <!--hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";-->
+      <!--var s = document.getElementsByTagName("script")[0]; -->
+      <!--s.parentNode.insertBefore(hm, s);-->
+    <!--})();-->
+    <!--</script>-->
+</body>
+</html>
