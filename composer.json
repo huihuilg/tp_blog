@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.6.0",
         "topthink/framework": "5.1.*",
-        "twbs/bootstrap": "^4.2"
+        "twbs/bootstrap": "^4.2",
+        "phpmailer/phpmailer": "^6.1"
     },
     "autoload": {
         "psr-4": {
