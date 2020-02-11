@@ -13,6 +13,23 @@ use think\Controller;
 
 class Test extends Controller
 {
+    public function printTest()
+    {
+        $a = array('a'=>'a',2=>2,3=>3,'c','b',9,5,'9'=>'7');
+        asort($a);
+//        $c = '\\\\122';
+//        $r = str_replace('2','6',$c);
+        $r = array_keys($a);
+        var_dump($r);
+
+    }
+
+    public function sendMail()
+    {
+        echo 1;
+    }
+
+
     public function common()
     {
 
