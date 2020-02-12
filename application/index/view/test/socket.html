@@ -1,36 +1,70 @@
 <!DOCTYPE html>
+{include file="public/header" /}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>WebSocket聊天室</title>
 </head>
 <body>
-<div id="main" style="width:600px;height: 300px; overflow: auto;border: solid 2px black;">
-</div>
-<textarea id="textarea"></textarea>
 <br/>
-<input type="button" value="发送数据" onclick="send()">
+<div class="container">
+    <h1 class="t_nav"><span>慢生活，不是懒惰，放慢速度不是拖延时间，而是让我们在生活中寻找到平衡。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">慢生活</a></h1>
+    <!--blogsbox begin-->
+    <div class="blogsbox">
+        <div id="main" style="width:600px;height: 300px; overflow: auto;border: solid 2px black;">
+        </div>
+
+        <div class="layui-input-block" style="margin-left:2px;">
+            <input type="text" id="textarea" name="title" lay-verify="title" autocomplete="off" placeholder="清输入信息"
+                   class="layui-input">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="send()">发送</button>
+        </div>
+
+<!--        <textarea id="textarea" placeholder="清输入信息"></textarea>-->
+<!--        <input type="button" value="发送" onclick="send()">-->
+    </div>
+    <div class="sidebar">
+        <div class="zhuanti">
+            <h2 class="hometitle">在线用户/待开发</h2>
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
 
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     var name =prompt("请输入您的昵称","匿名者"); //弹出input框
     // 打开一个 web socket
-    var ws = new WebSocket("ws://139.224.9.252:9501");
+    var ws = new WebSocket("ws://192.168.33.10:9501");
 
     ws.onopen = function() {
         console.log("连接成功");
+        res = JSON.stringify({'type':'bind','name':name,'msg':"绑定"});
+        console.log(res);
+        ws.send(res);
     };
 
     //收到消息 触发回调
     ws.onmessage = function (evt) {
-        var data = evt.data;
+        var data = JSON.parse(evt.data);
         console.log("收到socket服务消息，内容：" + data);
-        $('#main').append("<p>" + data + "</p>");
+        if(data.name){
+            $('#main').append("<p>" + data.name + " : " + data.msg + "</p>");
+        }else{
+            $('#main').append("<p>" + data.msg + "</p>");
+        }
+
     };
 
     function send() {
         var data = document.getElementById('textarea').value;
-        ws.send(name+ ":"+ data);
+        // ws.send(name+ ":"+ data);
+        msg = JSON.stringify({'type':'say','name':name,'msg':data});
+        ws.send(msg);
     }
 
     ws.onclose = function() {
