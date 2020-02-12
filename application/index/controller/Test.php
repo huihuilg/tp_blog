@@ -9,6 +9,7 @@
 namespace app\index\controller;
 
 
+use app\common\command\Sockett;
 use PHPMailer\PHPMailer\PHPMailer;
 use think\Controller;
 
@@ -16,14 +17,15 @@ class Test extends Controller
 {
     public function printTest()
     {
-        $a = array('a'=>'a',2=>2,3=>3,'c','b',9,5,'9'=>'7');
-        asort($a);
-//        $c = '\\\\122';
-//        $r = str_replace('2','6',$c);
-        $r = array_keys($a);
-        var_dump($r);
 
     }
+
+    public function socket()
+    {
+        return $this->fetch();
+    }
+
+
     /**
      * 配置youji
      */
