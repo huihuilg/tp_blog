@@ -39,7 +39,7 @@
 <script type="text/javascript">
     var name =prompt("请输入您的昵称","匿名者"); //弹出input框
     // 打开一个 web socket
-    var ws = new WebSocket("ws://139.224.9.252/:9501");
+    var ws = new WebSocket("ws://139.224.9.252:9501");
 
     ws.onopen = function() {
         console.log("连接成功");

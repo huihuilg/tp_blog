@@ -17,8 +17,10 @@ class Test extends Controller
 {
     public function printTest()
     {
-
+        dump($this->getRandomMoney(1,5));
     }
+
+
 
     public function socket()
     {
