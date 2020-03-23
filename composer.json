@@ -19,7 +19,10 @@
         "php": ">=5.6.0",
         "topthink/framework": "5.1.*",
         "twbs/bootstrap": "^4.2",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "php-amqplib/php-amqplib": "^2.11",
+        "nmred/kafka-php": " 0.2.*",
+        "elasticsearch/elasticsearch": "^7.6"
     },
     "autoload": {
         "psr-4": {

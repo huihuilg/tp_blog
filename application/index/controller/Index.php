@@ -15,10 +15,10 @@ class Index extends Controller
   	
   	public function test(Request $request)
     {
- 
-        header("HTTP/1.1 201 Created");
-        file_put_contents("./test.txt",var_export($request->param(),true));
-        exit();
+        header('location:http://www.baidu.com');
+//        header("HTTP/1.1 201 Created");
+//        file_put_contents("./test.txt",var_export($request->param(),true));
+//        exit();
     }
 
     public function index(Request $request)

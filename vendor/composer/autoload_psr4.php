@@ -7,6 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
+    'phpseclib\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'app\\' => array($baseDir . '/application'),
+    'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'PhpAmqpLib\\' => array($vendorDir . '/php-amqplib/php-amqplib/PhpAmqpLib'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'GuzzleHttp\\Stream\\' => array($vendorDir . '/ezimuel/guzzlestreams/src'),
+    'GuzzleHttp\\Ring\\' => array($vendorDir . '/ezimuel/ringphp/src'),
+    'Elasticsearch\\' => array($vendorDir . '/elasticsearch/elasticsearch/src/Elasticsearch'),
+    'Amp\\' => array($vendorDir . '/amphp/amp/lib'),
 );
