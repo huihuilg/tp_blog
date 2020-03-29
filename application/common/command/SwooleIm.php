@@ -50,21 +50,21 @@ class SwooleIm
         switch ($data['type']) {
             case 'bind':
                 if(!empty($data['uid'])){
-                    $redis->set('im_uid_'.$data['uid'],$frame->fd);
-                    $redis->set('im_fd_'.$frame->fd,$data['uid']);
+                    $redis->set('im_uid:'.$data['uid'],$frame->fd);
+                    $redis->set('im_fd:'.$frame->fd,$data['uid']);
                 }
                 break;
             case 'say':
                 $res = ['username'=>$data['data']['mine']['username'],'avatar'=>'http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg',
                     'id'=>$data['data']['mine']['id'],'type'=>'friend','content'=>$data['data']['mine']['content'],
                     'timestamp'=> 1467475443306];
-                $fd = $redis->get('im_uid_'.$data['data']['to']['id']);
+                $fd = $redis->get('im_uid:'.$data['data']['to']['id']);
 
                 $server->push($fd,json_encode($res));
                 break;
             case 'close':
                 if(!empty($data['uid'])){
-                    $redis->del('im_uid_'.$data['uid'],$frame->fd);
+                    $redis->del('im_uid:'.$data['uid'],$frame->fd);
                 }
                 break;
         }
@@ -81,9 +81,9 @@ class SwooleIm
         $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
         $redis->auth('123456');
-        $uid = $redis->get('im_fd_'.$fd);
-        $redis->del('im_fd_'.$fd);
-        $redis->del('im_uid_'.$uid);
+        $uid = $redis->get('im_fd:'.$fd);
+        $redis->del('im_fd:'.$fd);
+        $redis->del('im_uid:'.$uid);
     }
 }
 new SwooleIm();

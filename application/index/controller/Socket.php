@@ -34,11 +34,11 @@ class Socket extends SocketBase
         } else {
             $count = $redis->get('im_count');
         }
-        $list = $redis->keys('im_uid_*');
+        $list = $redis->keys('im_uid:*');
         if ($list) {
             $userList = [];
             foreach ($list as $key => $val) {
-                $userList[$key]['id'] = explode('_', $val)[2];
+                $userList[$key]['id'] = explode(':', $val)[2];
                 $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
                 $userList[$key]['status'] = User::find($userList[$key]['id'])->user_name;
                 $userList[$key]['sign'] = "我是客服测试";
