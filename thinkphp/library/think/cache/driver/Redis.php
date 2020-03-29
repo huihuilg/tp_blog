@@ -23,7 +23,7 @@ use think\cache\Driver;
 class Redis extends Driver
 {
     protected $options = [
-        'host'       => '192.168.33.10',
+        'host'       => 'localhost',
         'port'       => 6379,
         'password'   => '123456',
         'select'     => 0,
