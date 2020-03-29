@@ -46,22 +46,31 @@
             // var ws = new WebSocket("ws://192.168.33.10:9502");
             layim.on('chatChange', function(res){
                 var type = res.data.type;
-                // console.log(res.data);
+                console.log(res.data);
                 if(type === 'friend'){
                     $.ajax({
                         url:'/index/socket/isOnline',
                         data:{uid:res.data.id},
-                        success:function (res) {
-                            ress = JSON.parse(res);
+                        success:function (ress) {
+                            ress = JSON.parse(ress);
                             if(ress.is_online == 1){
                                 layim.setChatStatus('<span style="color:#FF5722;">在线</span>'); //模拟标注好友在线状态
-                            }else{
+                            }else if(ress.is_online == 0){
                                 layim.setChatStatus('<span style="color:#FF5722;">不在线</span>'); //模拟标注好友在线状态
+                                layer.open({
+                                    title: '失败'
+                                    ,content: '对方不在线, 无法收到信息'
+                                });
                             }
                         }
                     })
 
                 }
+            });
+            layim.on('online', function(status){
+                console.log(111111); //获得online或者hide
+                //此时，你就可以通过Ajax将这个状态值记录到数据库中了。
+                //服务端接口需自写。
             });
             ws.onopen = function () {
                 console.log("连接成功");
@@ -72,13 +81,13 @@
             layim.on('sendMessage', function (res) {
                 var mine = res.mine; //包含我发送的消息及我的信息
                 var to = res.to; //对方的信息
+                console.log(res);
                 if(to.is_online == 0){
                     layer.open({
                         title: '失败'
                         ,content: '对方不在线, 无法收到信息'
                     });
-                }else if(to.is_online == 1){
-                    //监听到上述消息后，就可以轻松地发送socket了，如：
+                }else{
                     ws.send(JSON.stringify({
                         type: 'say' //随便定义，用于在服务端区分消息类型
                         , data: res

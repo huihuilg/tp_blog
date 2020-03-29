@@ -40,6 +40,14 @@ class SwooleIm
      */
     public function onMessage($server, $frame)
     {
+        $swoole_mysql = new \Swoole\Coroutine\MySQL();
+        $swoole_mysql->connect([
+            'host'     => '139.224.9.252',
+            'port'     => 3306,
+            'user'     => 'blog',
+            'password' => '18500254733',
+            'database' => 'blog',
+        ]);
         $redis = new Redis();
         $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
@@ -53,14 +61,6 @@ class SwooleIm
                     $redis->set('im_uid:'.$data['uid'],$frame->fd);
                     $redis->set('im_fd:'.$frame->fd,$data['uid']);
                 }
-                $swoole_mysql = new \Swoole\Coroutine\MySQL();
-                $swoole_mysql->connect([
-                    'host'     => '139.224.9.252',
-                    'port'     => 3306,
-                    'user'     => 'blog',
-                    'password' => '18500254733',
-                    'database' => 'blog',
-                ]);
                 $res = $swoole_mysql->query("update blog_user set is_online=1 where id={$data['uid']}");
 //                foreach ($this->server->connections as $fds) {
 //                    // 需要先判断是否是正确的websocket连接，否则有可能会push失败
@@ -76,11 +76,23 @@ class SwooleIm
 //                }
                 break;
             case 'say':
-                $res = ['username'=>$data['data']['mine']['username'],'avatar'=>'http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg',
-                    'id'=>$data['data']['mine']['id'],'type'=>'friend','content'=>$data['data']['mine']['content'],
-                    'timestamp'=> 1467475443306];
-                $fd = $redis->get('im_uid:'.$data['data']['to']['id']);
-                $server->push($fd,json_encode($res));
+                $result = $swoole_mysql->query("select * from blog_user where id={$data['data']['mine']['id']} limit 1");
+                $res = [
+                        'username'=>$data['data']['mine']['username'],
+                        'avatar'=>'http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg',
+                        'id'=>$data['data']['mine']['id'],
+                        'type'=>'friend',
+                        'content'=>$data['data']['mine']['content'],
+                        'is_online'=>$result[0]['is_online'],
+                    ];
+
+                $to_line = $swoole_mysql->query("select * from blog_user where id={$data['data']['to']['id']}");
+                if($to_line[0]['is_online'] == 0){
+
+                }else{
+                    $fd = $redis->get('im_uid:'.$data['data']['to']['id']);
+                    $server->push($fd,json_encode($res));
+                }
                 break;
         }
     }
