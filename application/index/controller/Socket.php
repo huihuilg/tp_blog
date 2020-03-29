@@ -38,7 +38,7 @@ class Socket extends SocketBase
         if ($list) {
             $userList = [];
             foreach ($list as $key => $val) {
-                $userList[$key]['id'] = explode(':', $val)[2];
+                $userList[$key]['id'] = explode(':', $val)[1];
                 $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
                 $userList[$key]['status'] = User::find($userList[$key]['id'])->user_name;
                 $userList[$key]['sign'] = "我是客服测试";
