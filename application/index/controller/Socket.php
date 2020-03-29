@@ -23,6 +23,22 @@ class Socket extends SocketBase
         return $this->fetch();
     }
 
+    public function isOnline(Request $request)
+    {
+        $uid = $request->param('uid');
+        $is_online = User::find($uid)->is_online;
+        echo json_encode(['is_online'=>$is_online]);
+    }
+
+    public function editOnline(Request $request){
+        $uid = $request->param('uid');
+        echo $uid;
+        $is_online = $request->param('is_online');
+        $user = User::find($uid);
+        $user->is_online = $is_online;
+        $user->save();
+    }
+
     public function getList(Request $request)
     {
         $uid = $request->param('uid');
@@ -40,7 +56,7 @@ class Socket extends SocketBase
             foreach ($list as $key => $val) {
                 $userList[$key]['id'] = explode(':', $val)[1];
                 $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
-                $userList[$key]['status'] = User::find($userList[$key]['id'])->user_name;
+                $userList[$key]['is_online'] = User::find($userList[$key]['id'])->is_online;
                 $userList[$key]['sign'] = "我是客服测试";
                 $userList[$key]['avatar'] = "http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg";
             }

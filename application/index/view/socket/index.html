@@ -44,6 +44,25 @@
 //自定义客服窗口
             var ws = new WebSocket("ws://139.224.9.252:9502");
             // var ws = new WebSocket("ws://192.168.33.10:9502");
+            layim.on('chatChange', function(res){
+                var type = res.data.type;
+                // console.log(res.data);
+                if(type === 'friend'){
+                    $.ajax({
+                        url:'/index/socket/isOnline',
+                        data:{uid:res.data.id},
+                        success:function (res) {
+                            ress = JSON.parse(res);
+                            if(ress.is_online == 1){
+                                layim.setChatStatus('<span style="color:#FF5722;">在线</span>'); //模拟标注好友在线状态
+                            }else{
+                                layim.setChatStatus('<span style="color:#FF5722;">不在线</span>'); //模拟标注好友在线状态
+                            }
+                        }
+                    })
+
+                }
+            });
             ws.onopen = function () {
                 console.log("连接成功");
                 uid = $("#uid").val();
@@ -53,23 +72,36 @@
             layim.on('sendMessage', function (res) {
                 var mine = res.mine; //包含我发送的消息及我的信息
                 var to = res.to; //对方的信息
-                //监听到上述消息后，就可以轻松地发送socket了，如：
-                ws.send(JSON.stringify({
-                    type: 'say' //随便定义，用于在服务端区分消息类型
-                    , data: res
-                }));
-            })
+                if(to.is_online == 0){
+                    layer.open({
+                        title: '失败'
+                        ,content: '对方不在线, 无法收到信息'
+                    });
+                }else if(to.is_online == 1){
+                    //监听到上述消息后，就可以轻松地发送socket了，如：
+                    ws.send(JSON.stringify({
+                        type: 'say' //随便定义，用于在服务端区分消息类型
+                        , data: res
+                    }));
+                }
+            });
             //收到消息 触发回调
             ws.onmessage = function (res) {
                 var data = JSON.parse(res.data);
-                // console.log(data);
-                layim.getMessage({
-                    username: data.username //消息来源用户名
-                    , avatar: data.avatar //消息来源用户头像
-                    , id: data.id //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
-                    , type: "friend" //聊天窗口来源类型，从发送消息传递的to里面获取
-                    , content: data.content  //消息内容
-                });
+                if(data.type == 'close'){
+                    console.log(data);
+                }else if(data.type == 'bind'){
+                    console.log(data);
+                }else{
+                    // console.log(data);
+                    layim.getMessage({
+                        username: data.username //消息来源用户名
+                        , avatar: data.avatar //消息来源用户头像
+                        , id: data.id //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+                        , type: "friend" //聊天窗口来源类型，从发送消息传递的to里面获取
+                        , content: data.content  //消息内容
+                    });
+                }
             };
             ws.onclose = function () {
                 $.ajax({
@@ -83,17 +115,16 @@
                 alert("连接已关闭...");
                 console.log("连接已关闭...");
             };
-            ws.onerror = function()
-            {
+            ws.onerror = function() {
                 alert('error');
             };
 
             layim.config({
                 init: {
                     url: '/index/socket/getList?uid=' + uid, //接口地址（返回的数据格式见下文）
-                }
+                },
             });
-            layim.setChatMin(); //收缩聊天面板
+            // layim.setChatMin(); //收缩聊天面板
         });
     }
 </script>
