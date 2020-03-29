@@ -94,6 +94,16 @@
             <dt class="list_dt"> <a href="/index/life/index.html">慢生活</a> </dt>
             <dt class="list_dt"> <a href="/index/time/index.html">时间轴</a> </dt>
             <dt class="list_dt"> <a href="/index/gbook/index.html">留言</a> </dt>
+            <dt class="list_dt"><a href="/index/give/index.html">打赏</a> </dt>
+            <dt class="list_dt"><a href="/index/test/socket.html">简单聊天室</a> </dt>
+            <?php if(!empty(session('uid'))){?>
+            <dt class="list_dt"><a href="/index/socket/index.html">联系在线客服</a> </dt>
+            <dt class="list_dt"><a style="color:#42ffcf;" href="/index/login/loginOut.html">退出登录</a> </dt>
+            <?php } ?>
+            <?php else{ ?>
+            <dt class="list_dt"><a style="color:#42ffcf;" href="/index/login/login.html">登录</a> </dt>
+            <dt class="list_dt"><a style="color:#3bf0ff;" href="/index/login/register.html">注册</a> </dt>
+            <?php }?>
         </dl>
     </div>
     <!--mnav end-->
