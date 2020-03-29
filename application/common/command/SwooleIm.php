@@ -41,7 +41,7 @@ class SwooleIm
     public function onMessage($server, $frame)
     {
         $redis = new Redis();
-        $redis->connect('139.224.9.252',6379);
+        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
         $redis->auth('123456');
         echo $frame->fd . '来了，说：' . $frame->data . PHP_EOL;//打印到我们终端
@@ -78,7 +78,7 @@ class SwooleIm
     {
         echo $fd . '走了' . PHP_EOL;//打印到我们终端
         $redis = new Redis();
-        $redis->connect('139.224.9.252',6379);
+        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
         $redis->auth('123456');
         $uid = $redis->get('im_fd_'.$fd);
