@@ -10,8 +10,10 @@ namespace app\index\controller;
 
 
 use app\admin\model\User;
+use think\cache\driver\Redis;
 use think\Controller;
 use think\Request;
+use think\Session;
 
 class Login extends Controller
 {
@@ -32,10 +34,9 @@ class Login extends Controller
         $map['password'] = md5($info['password']);
         $isLogin = $user->where($map)->find();
         if($isLogin){
-            cookie('user_name',$isLogin->user_name,'socket');
+            cookie('user_name',$isLogin->user_name);
 //            cookie('uid',$isLogin->id);
-            session('user_name', $isLogin->user_name,'socket');
-            session('uid', $isLogin->id,'socket');
+            session('uid',$isLogin->id);
             return 1;
         }
         return 0;
@@ -58,10 +59,9 @@ class Login extends Controller
         $user->user_name = trim($info['username']);
         $user->password = md5(trim($info['password']));
         $user->save();
-        cookie('user_name',$user->user_name,'socket');
+        cookie('user_name',$user->user_name);
 //            cookie('uid',$isLogin->id);
-        session('user_name', $user->user_name,'socket');
-        session('uid', $user->id,'socket');
+        session('uid',$user->id);
         return 1;
     }
     /**
@@ -74,7 +74,7 @@ class Login extends Controller
 
     public function loginOut()
     {
-        session(null,'socket');
+        \think\facade\Session::delete('uid');
         $this->success('退出成功','/index/index/index');
     }
 }

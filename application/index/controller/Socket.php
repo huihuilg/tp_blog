@@ -8,16 +8,71 @@
 
 namespace app\index\controller;
 
+use app\admin\model\User;
 use \Gateway;
-use think\Controller;
+use think\cache\driver\Redis;
 use think\Request;
 use think\Session;
 
 class Socket extends SocketBase
 {
-    public function index(Request $request){
-
+    public function index(Request $request)
+    {
+        $uid = session('uid');
+        $this->assign('uid', $uid);
         return $this->fetch();
+    }
+
+    public function getList(Request $request)
+    {
+        $uid = $request->param('uid');
+        $name = User::find($uid)->user_name;
+        $redis = new Redis();
+        $count = $redis->has('im_count');
+        if (!$count) {
+            $count = 0;
+        } else {
+            $count = $redis->get('im_count');
+        }
+        $list = $redis->keys('im_uid_*');
+        if ($list) {
+            $userList = [];
+            foreach ($list as $key => $val) {
+                $userList[$key]['id'] = explode('_', $val)[2];
+                $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
+                $userList[$key]['status'] = User::find($userList[$key]['id'])->user_name;
+                $userList[$key]['sign'] = "我是客服测试";
+                $userList[$key]['avatar'] = "http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg";
+            }
+        } else {
+            $userList = [];
+        }
+        echo json_encode([
+            'code' => 0,
+            'count' => $count,
+            'msg' => '',
+            'data' => [
+                'mine' => [
+                    'username' => $name,
+                    'id' => $uid,
+                    'status' => "online",
+                    'sign' => '心向大海',
+                    'avatar' => "//res.layui.com/images/fly/avatar/00.jpg"
+                ],
+                'friend' => [
+                    [
+                        'groupname' => '在线人员',
+                        'id' => 0,
+                        'list' => $userList
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    public function aa(Request $request)
+    {
+        file_put_contents('./1.txt','uid');
     }
 
     /**
