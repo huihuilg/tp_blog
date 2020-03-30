@@ -62,6 +62,10 @@ class SwooleIm
                     $redis->set('im_fd:'.$frame->fd,$data['uid']);
                 }
                 $res = $swoole_mysql->query("update blog_user set is_online=1 where id={$data['uid']}");
+                $res = [
+                    'type'=>'bind'
+                ];
+                $server->push($frame->fd,json_encode($res));
 //                foreach ($this->server->connections as $fds) {
 //                    // 需要先判断是否是正确的websocket连接，否则有可能会push失败
 //                    if ($server->isEstablished($fds)) {

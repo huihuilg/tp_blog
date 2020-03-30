@@ -100,6 +100,11 @@
                 if(data.type == 'close'){
                     console.log(data);
                 }else if(data.type == 'bind'){
+                    layim.config({
+                        init: {
+                            url: '/index/socket/getList?uid=' + uid, //接口地址（返回的数据格式见下文）
+                        },
+                    });
                     console.log(data);
                 }else{
                     // console.log(data);
@@ -128,11 +133,6 @@
                 alert('error');
             };
 
-            layim.config({
-                init: {
-                    url: '/index/socket/getList?uid=' + uid, //接口地址（返回的数据格式见下文）
-                },
-            });
             // layim.setChatMin(); //收缩聊天面板
         });
     }

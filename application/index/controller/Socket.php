@@ -23,6 +23,10 @@ class Socket extends SocketBase
         return $this->fetch();
     }
 
+    /**
+     * @param Request $request
+     * 是否在校
+     */
     public function isOnline(Request $request)
     {
         $uid = $request->param('uid');
@@ -30,15 +34,11 @@ class Socket extends SocketBase
         echo json_encode(['is_online'=>$is_online]);
     }
 
-    public function editOnline(Request $request){
-        $uid = $request->param('uid');
-        echo $uid;
-        $is_online = $request->param('is_online');
-        $user = User::find($uid);
-        $user->is_online = $is_online;
-        $user->save();
-    }
 
+    /**
+     * @param Request $request
+     * 获取在校数据
+     */
     public function getList(Request $request)
     {
         $uid = $request->param('uid');
@@ -50,18 +50,27 @@ class Socket extends SocketBase
         } else {
             $count = $redis->get('im_count');
         }
-        $list = $redis->keys('im_uid:*');
-        if ($list) {
-            $userList = [];
-            foreach ($list as $key => $val) {
-                $userList[$key]['id'] = explode(':', $val)[1];
-                $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
-                $userList[$key]['is_online'] = User::find($userList[$key]['id'])->is_online;
-                $userList[$key]['sign'] = "我是客服测试";
-                $userList[$key]['avatar'] = "http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg";
-            }
-        } else {
-            $userList = [];
+//        $list = $redis->keys('im_uid:*');
+//        if ($list) {
+//            $userList = [];
+//            foreach ($list as $key => $val) {
+//                $userList[$key]['id'] = explode(':', $val)[1];
+//                $userList[$key]['username'] = User::find($userList[$key]['id'])->user_name;
+//                $userList[$key]['is_online'] = User::find($userList[$key]['id'])->is_online;
+//                $userList[$key]['sign'] = "我是客服测试";
+//                $userList[$key]['avatar'] = "http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg";
+//            }
+//        } else {
+//            $userList = [];
+//        }
+        $list = User::where(['is_online'=>1])->select();
+        $userList = [];
+        foreach($list as $key=>$value){
+            $userList[$key]['id'] = $value['id'];
+            $userList[$key]['username'] = $value['user_name'];
+            $userList[$key]['is_online'] = $value['is_online'];
+            $userList[$key]['sign'] = '个性签名';
+            $userList[$key]['avatar'] = "http://img.mp.sohu.com/q_mini,c_zoom,w_640/upload/20170731/4c79a1758a3a4c0c92c26f8e21dbd888_th.jpg";
         }
         echo json_encode([
             'code' => 0,
@@ -72,7 +81,7 @@ class Socket extends SocketBase
                     'username' => $name,
                     'id' => $uid,
                     'status' => "online",
-                    'sign' => '心向大海',
+                    'sign' => '开心每一天',
                     'avatar' => "//res.layui.com/images/fly/avatar/00.jpg"
                 ],
                 'friend' => [
