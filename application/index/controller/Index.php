@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use app\admin\model\Banner;
 use app\admin\model\Like;
+use app\admin\model\User;
 use think\Controller;
 use think\Request;
 
@@ -109,11 +110,11 @@ class Index extends Controller
      */
     public function learnLike($id)
     {
-        if(empty(session('uid','','socket'))){
+        if(empty(session('uid','','liu_'))){
             return $this->error('请先登录');
         }
         $like = new Like();
-        $isLike = $like->where(['uid'=>session('uid','','socket'),'m_id'=>2,'l_id'=>$id])->find();
+        $isLike = $like->where(['uid'=>session('uid','','liu_'),'m_id'=>2,'l_id'=>$id])->find();
         if(!empty($isLike)){
             return $this->error('请不要重复点赞');
         }
@@ -122,7 +123,7 @@ class Index extends Controller
         $learn->where(['id'=>$id,'status'=>1])->setInc('like_num',1);
         //保存
         $like->l_id = $id;
-        $like->uid = session('uid','','socket');
+        $like->uid = session('uid','','liu_');
         $like->m_id = 2;
         $like->save();
         //数据查询
@@ -194,11 +195,11 @@ class Index extends Controller
      */
     public function lifeLike($id)
     {
-        if(empty(session('uid','','socket'))){
+        if(empty(session('uid','','liu_'))){
             return $this->error('请先登录');
         }
         $like = new Like();
-        $isLike = $like->where(['uid'=>session('uid','','socket'),'m_id'=>3,'l_id'=>$id])->find();
+        $isLike = $like->where(['uid'=>session('uid','','liu_'),'m_id'=>3,'l_id'=>$id])->find();
         if(!empty($isLike)){
             return $this->error('请不要重复点赞');
         }
@@ -207,7 +208,7 @@ class Index extends Controller
         $life->where(['id'=>$id,'status'=>1])->setInc('like_num',1);
         //保存
         $like->l_id = $id;
-        $like->uid = session('uid','','socket');
+        $like->uid = session('uid','','liu_');
         $like->m_id = 3;
         $like->save();
         //数据查询
@@ -239,7 +240,14 @@ class Index extends Controller
     }
 
 
-
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * 搜索
+     */
     public function search(Request $request)
     {
         $title = $request->param('keyboard');
@@ -252,20 +260,23 @@ class Index extends Controller
         }
         $page = max(1,input('get.page'));
         $limit = ($page-1) * $num;
-
-        $learnInfo = $learn->alias('l')->field('l.id,l.title,l.m_id,l.content,l.create_time,u.nickname,l.pic_url,l.like_num,l.page_view')->join('blog_user u','l.uid=u.id')->where(['l.status'=>1])->where('title','like','%'.$title.'%')->order('l.create_time desc')->limit($limit,$num)->select()->toArray();
+        if(empty($title)){
+            $this->error('请输入关键字搜索');
+        }
+        $learnInfo = $learn->alias('l')->field('l.id,l.uid,l.title,l.m_id,l.content,l.create_time,l.pic_url,l.like_num,l.page_view')->where(['l.status'=>1])->where('l.title','like','%'.$title.'%')->order('l.create_time desc')->limit($limit,$num)->select()->toArray();
         $counts1 = $learn->where(['status'=>1])->count();
 
         foreach($learnInfo as &$val){
             $val['create_time'] = date('Y-m-d',strtotime($val['create_time']));
+            $val['nickname'] = User::find($val['uid'])->nickname;
         }
 
-
         $life = new \app\admin\model\Life();
-        $lifeInfo = $life->alias('l')->field('l.id,l.title,l.m_id,l.content,l.create_time,u.nickname,l.pic_url,l.like_num,l.page_view')->join('blog_user u','l.uid=u.id')->where(['l.status'=>1])->where('title','like','%'.$title.'%')->order('l.create_time desc')->limit($limit,$num)->select()->toArray();
+        $lifeInfo = $life->alias('l')->field('l.id,l.uid,l.title,l.m_id,l.content,l.create_time,l.pic_url,l.like_num,l.page_view')->join('blog_user u','l.uid=u.id')->where(['l.status'=>1])->where('title','like','%'.$title.'%')->order('l.create_time desc')->limit($limit,$num)->select()->toArray();
         $counts2 = $life->where(['status'=>1])->count();
         foreach($lifeInfo as &$val){
             $val['create_time'] = date('Y-m-d',strtotime($val['create_time']));
+            $val['nickname'] = User::find($val['uid'])->nickname;
         }
         $learnInfo = array_merge($learnInfo,$lifeInfo);
         $counts = $counts1 + $counts2;
@@ -287,10 +298,5 @@ class Index extends Controller
         $this->assign(['learnInfo'=>$learnInfo,'counts'=>$counts,'page'=>$page,'num'=>$num,'result'=>$result,'recommend'=>$recommend,'clickTop'=>$clickTop]);
         return $this->fetch();
     }
-    
-    
-    public function tt()
-    {
-    	echo json_encode(['res'=>'成功','code'=>200]);
-    }
+
 }
