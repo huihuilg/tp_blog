@@ -110,11 +110,11 @@ class Index extends Controller
      */
     public function learnLike($id)
     {
-        if(empty(session('uid','','liu_'))){
+        if(empty(session('uid',''))){
             return $this->error('请先登录');
         }
         $like = new Like();
-        $isLike = $like->where(['uid'=>session('uid','','liu_'),'m_id'=>2,'l_id'=>$id])->find();
+        $isLike = $like->where(['uid'=>session('uid'),'m_id'=>2,'l_id'=>$id])->find();
         if(!empty($isLike)){
             return $this->error('请不要重复点赞');
         }
@@ -123,7 +123,7 @@ class Index extends Controller
         $learn->where(['id'=>$id,'status'=>1])->setInc('like_num',1);
         //保存
         $like->l_id = $id;
-        $like->uid = session('uid','','liu_');
+        $like->uid = session('uid');
         $like->m_id = 2;
         $like->save();
         //数据查询
@@ -195,11 +195,11 @@ class Index extends Controller
      */
     public function lifeLike($id)
     {
-        if(empty(session('uid','','liu_'))){
+        if(empty(session('uid'))){
             return $this->error('请先登录');
         }
         $like = new Like();
-        $isLike = $like->where(['uid'=>session('uid','','liu_'),'m_id'=>3,'l_id'=>$id])->find();
+        $isLike = $like->where(['uid'=>session('uid'),'m_id'=>3,'l_id'=>$id])->find();
         if(!empty($isLike)){
             return $this->error('请不要重复点赞');
         }
@@ -208,7 +208,7 @@ class Index extends Controller
         $life->where(['id'=>$id,'status'=>1])->setInc('like_num',1);
         //保存
         $like->l_id = $id;
-        $like->uid = session('uid','','liu_');
+        $like->uid = session('uid');
         $like->m_id = 3;
         $like->save();
         //数据查询

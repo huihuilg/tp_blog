@@ -34,7 +34,7 @@ class Gbook extends Common
 //        $group_id = $_SESSION['group'];
         // client_id与uid绑定
         $client_id = $request->param('client_id');
-        \Gateway::bindUid($client_id, session('uid','','hui'));
+        \Gateway::bindUid($client_id, session('uid',''));
         // 加入某个群组（可调用多次加入多个群组）
 //        Gateway::joinGroup($client_id, $group_id);
     }

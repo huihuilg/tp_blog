@@ -10,10 +10,8 @@ namespace app\index\controller;
 
 
 use app\admin\model\User;
-use think\cache\driver\Redis;
 use think\Controller;
 use think\Request;
-use think\Session;
 
 class Login extends Controller
 {
@@ -36,7 +34,7 @@ class Login extends Controller
         if($isLogin){
             cookie('user_name',$isLogin->user_name);
 //            cookie('uid',$isLogin->id);
-            session('uid',$isLogin->id,'liu_');
+            session('uid',$isLogin->id);
             return 1;
         }
         return 0;
@@ -61,7 +59,7 @@ class Login extends Controller
         $user->save();
         cookie('user_name',$user->user_name);
 //            cookie('uid',$isLogin->id);
-        session('uid',$user->id,'liu_');
+        session('uid',$user->id);
         return 1;
     }
     /**
