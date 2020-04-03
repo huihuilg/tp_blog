@@ -10,7 +10,7 @@
             <span class="blogpic"><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if} title=""><img src="{$val.pic_url}" alt=""></a></span>
             <!--<p class="blogtext">-->
             <div class="blogtext" style="height: 68px;">
-                <?=html_entity_decode($val['content'])?>...
+                <?=$val['content']?>...
             </div>
             <!--</p>-->
             <div class="bloginfo">
