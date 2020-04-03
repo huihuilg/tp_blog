@@ -37,10 +37,10 @@ class Index extends Common
     {
         $server_name = $_SERVER['SERVER_NAME'];
         $user = new User();
-        $userNum = $user->where(['status'=>1,''])->count();
+        $userNum = $user->where(['status'=>1,'root'=>1])->count();
         $learn = new \app\admin\model\Learn();
         $life = new \app\admin\model\Life();
-        $learnNum = $learn->where(['status'=>1,'root'=>1])->count();
+        $learnNum = $learn->where(['status'=>1])->count();
         $lifeNum = $life->where(['status'=>1])->count();
         $count = $learnNum + $lifeNum;
         $phpversion = PHP_VERSION;
