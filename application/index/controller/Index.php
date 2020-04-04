@@ -81,7 +81,7 @@ class Index extends Controller
         parse_str($response, $params);
         $openId = $qqLogin->get_openid();
         $url = sprintf(QqLogin::USER_INFO,$params["access_token"],$qqLogin->APP_ID,$openId);
-        $result = json_decode($this->get_contents($url),1);
+        $result = json_decode($qqLogin->get_contents($url),1);
         $user = new User();
         $isExist = $user->where(['user_name'=>$result['nickname']])->find();
         if($isExist){

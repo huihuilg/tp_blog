@@ -31,7 +31,6 @@ class QqLogin
         $user = json_decode($response);
         if(isset($user->error)){
             echo '错误码：'.$user->error.'错误描述：'.$user->error_description;exit();
-//            $this->error->showError($user->error, $user->error_description);
         }
         //------记录openid
 //        session('openid',$user->openid);
