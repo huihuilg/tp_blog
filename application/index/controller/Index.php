@@ -79,7 +79,7 @@ class Index extends Controller
         }
         $params = array();
         parse_str($response, $params);
-        $openId = $qqLogin->get_openid();
+        $openId = $qqLogin->get_openid($params['access_token']);
         $url = sprintf(QqLogin::USER_INFO,$params["access_token"],$qqLogin->APP_ID,$openId);
         $result = json_decode($qqLogin->get_contents($url),1);
         $user = new User();
