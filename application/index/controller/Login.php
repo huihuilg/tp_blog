@@ -29,6 +29,9 @@ class Login extends Controller
         $info = $request->param();
         $user = new User();
         $map['user_name'] = $info['username'];
+        if(empty($info['password'])){
+            return 0;
+        }
         $map['password'] = md5($info['password']);
         $isLogin = $user->where($map)->find();
         if($isLogin){

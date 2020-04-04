@@ -14,13 +14,10 @@ class Index extends Controller
     const GET_AUTH_CODE_URL = "https://graph.qq.com/oauth2.0/authorize";
     const GET_ACCESS_TOKEN_URL = "https://graph.qq.com/oauth2.0/token";
     const GET_OPENID_URL = "https://graph.qq.com/oauth2.0/me";
-    protected $recorder;
-    public $urlUtils;
-    protected $error;
+    const USER_INFO = 'https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s';
     private $APP_ID = 101544609;
     private $APP_Key = '778dcbddc5147be3a33cc1f17a290d6d';
     private $callback = 'http://sunny.huihuil.cn/index/index/qqaction';
-
 
 //    protected $middleware = [
 //        'Auth' 	=> ['except' 	=> ['index'] ],
@@ -28,10 +25,8 @@ class Index extends Controller
 //    ];
     public function test(Request $request)
     {
-        header('location:http://www.baidu.com');
 //        header("HTTP/1.1 201 Created");
-//        file_put_contents("./test.txt",var_export($request->param(),true));
-//        exit();
+
     }
 
     /**
@@ -44,8 +39,7 @@ class Index extends Controller
         $scope = 'get_user_info,add_share,list_album,add_album,upload_pic,add_topic,add_one_blog,add_weibo,check_page_fans,add_t,add_pic_t,del_t,get_repost_list,get_info,get_other_info,get_fanslist,get_idolist,add_idol,del_idol,get_tenpay_addr';
         //-------生成唯一随机串防CSRF攻击
         $state = md5(uniqid(rand(), TRUE));
-        $this->recorder['state'] = $state;
-
+        session('state',$state) ;
         //-------构造请求参数列表
         $keysArr = array(
             "response_type" => "code",
@@ -54,17 +48,14 @@ class Index extends Controller
             "state" => $state,
             "scope" => $scope
         );
-
         $login_url =  $this->combineURL(self::GET_AUTH_CODE_URL, $keysArr);
-
         header("Location:$login_url");
-
     }
     public function qqaction(Request $request)
     {
-        $state = $this->recorder["state"];
+        $state = session('state') ;;
         //--------验证state防止CSRF攻击
-        if(!$state || $_GET['state'] != $state){
+        if(!$state || $request->get('state') != $state){
             echo 'state 验证错误';exit();
         }
 
@@ -76,11 +67,9 @@ class Index extends Controller
             "client_secret" => $this->APP_Key,
             "code" => $_GET['code']
         );
-
         //------构造请求access_token的url
         $token_url = $this->combineURL(self::GET_ACCESS_TOKEN_URL, $keysArr);
         $response = $this->get_contents($token_url);
-
         if(strpos($response, "callback") !== false){
 
             $lpos = strpos($response, "(");
@@ -92,18 +81,42 @@ class Index extends Controller
                 echo '错误码：'.$msg->error.'错误描述：'.$msg->error_description;exit();
             }
         }
-
+        echo $response;
         $params = array();
         parse_str($response, $params);
+//        session('access_token',$params["access_token"]) ;
+//        echo 'access_token是：'.$params["access_token"];
+        $openId = $this->get_openid();
+        $url = sprintf(self::USER_INFO,$params["access_token"],$this->APP_ID,$openId);
+        $result = json_decode($this->get_contents($url),1);
 
-        $this->recorder["access_token"] = $params["access_token"];
-        echo $params["access_token"];
+        $user = new User();
+        $isExist = $user->where(['user_name'=>$result['nickname']])->find();
+        if($isExist){
+            cookie('user_name',$isExist->user_name);
+            session('uid',$isExist->id);
+            $this->redirect('/');
+        }else{
+            $user->user_name = trim($result['nickname']);
+            $user->sex = $result['gender_type'];
+            $user->province = $result['province'];
+            $user->city = $result['city'];
+            $user->user_pic = $result['figureurl_2'];
+            $user->age = $result['year'];
+            $user->qq_openid = $openId;
+            $user->save();
+            cookie('user_name',$user->user_name);
+//            cookie('uid',$isLogin->id);
+            session('uid',$user->id);
+            $this->redirect('/');
+        }
+//        dump($result);
     }
     public function get_openid(){
 
         //-------请求参数列表
         $keysArr = array(
-            "access_token" => $this->recorder["access_token"]
+            "access_token" => session('access_token')
         );
 
         $graph_url = $this->combineURL(self::GET_OPENID_URL, $keysArr);
@@ -122,10 +135,9 @@ class Index extends Controller
             echo '错误码：'.$user->error.'错误描述：'.$user->error_description;exit();
 //            $this->error->showError($user->error, $user->error_description);
         }
-
         //------记录openid
-        $this->recorder["openid"] =  $user->openid;
-        echo $user->openid;
+//        session('openid',$user->openid);
+        return $user->openid;
     }
     /**
      * combineURL
