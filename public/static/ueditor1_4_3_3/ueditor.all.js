@@ -28761,7 +28761,7 @@ UE.ui = baidu.editor.ui = {};
             function setCount(editor,ui) {
                 editor.setOpt({
                     wordCount:true,
-                    maximumWords:100000,
+                    maximumWords:65535,
                     wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
                     wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
                 });
@@ -28775,13 +28775,8 @@ UE.ui = baidu.editor.ui = {};
                 }
                 var count = editor.getContentLength(true);
                 if (count > max) {
-                    // countDom.innerHTML = errMsg;
-                    // editor.fireEvent("wordcountoverflow");
-                    var content = editor.getContentTxt();
-
-                    editor.setContent(content.substring(0,max));
-
-                    editor.focus(true);
+                    countDom.innerHTML = errMsg;
+                    editor.fireEvent("wordcountoverflow");
                 } else {
                     countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
                 }

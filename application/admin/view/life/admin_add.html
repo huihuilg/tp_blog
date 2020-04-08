@@ -88,7 +88,9 @@
                 <!--autocomplete="off" class="layui-input">-->
                 <textarea id="container" name="content" type="text/plain" style="width:1024px;height:500px;"></textarea>
                 <script type="text/javascript">
-                    var editor = UE.getEditor('container');
+                    var editor = UE.getEditor('container',{
+                        maximumWords:65535,         //最大长度限制
+                    });
                 </script>
             </div>
         </div>
