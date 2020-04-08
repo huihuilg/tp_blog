@@ -5,7 +5,7 @@
   <div class="banner">
     <div id="banner" class="fader">
       {foreach $banner as $val}
-      <li class="slide" ><a href="{$val.link}" target="_blank"><img src="{$val.pic_url}"><span class="imginfo">{$val.content}</span></a></li>
+      <li class="slide" ><a href="{$val.link}" target="_blank"><img src="{$val.pic_url}"><span class="imginfo">{$val.content|raw}</span></a></li>
       {/foreach}
       <div class="fader_controls">
         <div class="page prev" data-target="prev">&lsaquo;</div>
@@ -105,7 +105,7 @@
       </span>
       <!--<p class="blogtext">-->
       <div class="blogtext" style="height: 68px;">
-         {$val.content}...
+         {$val.content|raw}...
       </div>
       <!--</p>-->
       <div class="bloginfo">
