@@ -4,6 +4,7 @@ namespace app\index\controller;
 use app\admin\model\Banner;
 use app\admin\model\Like;
 use app\admin\model\User;
+use think\config\driver\Json;
 use think\Controller;
 use think\Request;
 use QqLogin;
@@ -17,8 +18,18 @@ class Index extends Controller
 //    ];
     public function test(Request $request)
     {
-//        header("HTTP/1.1 201 Created");
-
+        $res = [
+            'code'=> 0,
+            'msg'=>'成功',
+            'data'=>[
+                [
+                    'id'=>1,
+                    'name'=>'法法',
+                    'age'=>20
+                ]
+            ]
+        ];
+        return json($res);
     }
 
     /**
@@ -30,7 +41,7 @@ class Index extends Controller
         $appid = $qqLogin->APP_ID;
         $callback = $qqLogin->callback;
         $scope = '';
-        //-------生成唯一随机串防CSRF攻击
+        //-------生成唯一随(机串防CSRF攻击
         $state = md5(uniqid(rand(), TRUE));
         session('state',$state) ;
         //-------构造请求参数列表

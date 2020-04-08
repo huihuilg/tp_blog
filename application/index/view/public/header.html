@@ -8,11 +8,6 @@
     <meta name="keywords" content="个人博客,光辉个人博客,辉博客模板,刘光辉" />
     <meta name="description" content="光辉个人博客"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/static/ueditor1_4_3_3/third-party/SyntaxHighlighter/shCore.js"></script>
-    <link rel="stylesheet" href="/static/ueditor1_4_3_3/third-party/SyntaxHighlighter/shCoreDefault.css">
-    <script  type="text/javascript">
-        SyntaxHighlighter.all();
-    </script>
     <link href="/static/css/base.css" rel="stylesheet">
     <link href="/static/css/index.css" rel="stylesheet">
     <link href="/static/css/m.css" rel="stylesheet">
@@ -29,6 +24,13 @@
   	<link rel="stylesheet" href="/static/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/static/lib/layui/layim.css">
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+
+    <script src="/static/ueditor1_4_3_3/third-party/SyntaxHighlighter/shCore.js"></script>
+    <link rel="stylesheet" href="/static/ueditor1_4_3_3/third-party/SyntaxHighlighter/shCoreDefault.css">
+    <link rel="stylesheet" href="/static/ueditor1_4_3_3/ueditor.parse.js">
+    <script  type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 </head>
 <body>
 <header>
@@ -51,7 +53,6 @@
             <li><a href="/index/time/index.html">时间轴</a> </li>
 <!--            <li><a href="/index/gbook/index.html">留言</a> </li>-->
             <li><a href="/index/give/index.html">打赏</a> </li>
-            <li><a href="/index/test/socket.html">简单聊天室</a> </li>
             <?php if(!empty(session('uid'))){?>
             <li><a href="/index/socket/index.html">联系在线客服</a> </li>
             <li><a style="color:#42ffcf;" href="/index/login/loginOut.html">退出登录</a> </li>
@@ -74,19 +75,16 @@
             <!--search begin-->
             <div id="search_bar" class="search_bar">
                 <form  id="searchform" action="/index/index/search" method="post" name="searchform">
-                    <input class="input" placeholder="想搜点什么呢..." type="text" name="keyboard" id="keyboard">
-                    <input type="hidden" name="show" value="title" />
-                    <input type="hidden" name="tempid" value="1" />
-                    <input type="hidden" name="tbname" value="news">
-                    <input type="hidden" name="Submit" value="搜索" />
+                    <input class="input" placeholder="按回车搜索" type="text" name="keyboard" id="keyboard">
                     <span class="search_ico"></span>
                 </form>
             </div>
+            <li><a href="/index/test/socket.html">简单聊天室</a> </li>
             <!--search end-->
         </nav>
     </div>
     <!--mnav begin-->
-   <div id="mnav">
+   <dt id="mnav">
         <h2><a href="/" class="mlogo">hui博客</a><span class="navicon"></span></h2>
         <dl class="list_dl">
             <dt class="list_dt"> <a href="/index/index/index.html">网站首页</a> </dt>
@@ -116,7 +114,17 @@
                 </script>
             </dt>
             <?php }?>
+            <dt class="list_dt" >
+                <form  action="/index/index/search" method="post" name="searchform">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                            <input  class="layui-input" placeholder="按回车搜索" type="text" name="keyboard">
+                    </div>
+                </div>
+                </form>
+            </dt>
         </dl>
+   </dt>
     </div>
     <!--mnav end-->
 </header>

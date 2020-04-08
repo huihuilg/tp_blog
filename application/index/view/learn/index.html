@@ -9,7 +9,7 @@
             <h3 class="blogtitle"><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if} target="_blank">{$val.title}</a></h3>
             <span class="blogpic"><a {if $val.m_id==2} href="/index/index/learnContent/id/{$val.id}" {elseif $val.m_id==3}href="/index/index/lifeContent/id/{$val.id}" {/if} title=""><img src="{$val.pic_url}" alt=""></a></span>
             <div class="blogtext" style="height: 68px;">
-                <?=$val['content']?>...
+               {$val.content}...
             </div>
             <div class="bloginfo">
                 <ul>
