@@ -48,10 +48,12 @@ class SwooleIm
             'password' => '18500254733',
             'database' => 'blog',
         ]);
-        $redis = new Redis();
-        $redis->connect('localhost',6379);
+        $redis = new Redis(['host'       => 'localhost',
+            'port'       => 6379,
+            'password'   => config('password'),]);
+//        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
-        $redis->auth('123456');
+//        $redis->auth('18500254733');
         echo $frame->fd . '来了，说：' . $frame->data . PHP_EOL;//打印到我们终端
 //        var_export($this->server->getClientList(0,5));
         $data = json_decode($frame->data,true);
@@ -108,10 +110,12 @@ class SwooleIm
     public function onClose($server, $fd)
     {
         echo $fd . '走了' . PHP_EOL;//打印到我们终端
-        $redis = new Redis();
-        $redis->connect('localhost',6379);
+        $redis = new Redis(['host'       => 'localhost',
+            'port'       => 6379,
+            'password'   => config('password'),]);
+//        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
-        $redis->auth('123456');
+//        $redis->auth('123456');
         $uid = $redis->get('im_fd:'.$fd);
         $redis->del('im_fd:'.$fd);
         $redis->del('im_uid:'.$uid);
