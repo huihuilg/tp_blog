@@ -46,13 +46,13 @@ class SwooleIm
             'host'     => '139.224.9.252',
             'port'     => 3306,
             'user'     => 'blog',
-            'password' =>18500253733,
+            'password' =>18500254733,
             'database' => 'blog',
         ]);
         $redis = new Redis();
         $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
-        $redis->auth(config('database.password'));
+        $redis->auth('18500254733');
         echo $frame->fd . '来了，说：' . $frame->data . PHP_EOL;//打印到我们终端
 //        var_export($this->server->getClientList(0,5));
         $data = json_decode($frame->data,true);
@@ -122,7 +122,7 @@ class SwooleIm
             'host'     => '139.224.9.252',
             'port'     => 3306,
             'user'     => 'blog',
-            'password' =>18500253733,
+            'password' =>18500254733,
             'database' => 'blog',
         ]);
         $res = $swoole_mysql->query("update blog_user set is_online=0 where id=$uid");
