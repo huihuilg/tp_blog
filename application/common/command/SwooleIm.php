@@ -8,6 +8,7 @@ use Swoole\WebSocket\Server as WebsocketServer;
 use Swoole\Coroutine\Redis;
 use Swoole\Coroutine;
 
+
 class SwooleIm
 {
     public $server;
@@ -50,7 +51,7 @@ class SwooleIm
         ]);
         $redis = new Redis(['host'       => 'localhost',
             'port'       => 6379,
-            'password'   => config('password'),]);
+            'password'   => 18500254733,]);
 //        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
 //        $redis->auth('18500254733');
@@ -112,7 +113,7 @@ class SwooleIm
         echo $fd . '走了' . PHP_EOL;//打印到我们终端
         $redis = new Redis(['host'       => 'localhost',
             'port'       => 6379,
-            'password'   => config('password'),]);
+            'password'   => 18500254733]);
 //        $redis->connect('localhost',6379);
 //        $redis->connect('192.168.33.10',6379);
 //        $redis->auth('123456');
