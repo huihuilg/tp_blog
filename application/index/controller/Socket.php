@@ -43,7 +43,7 @@ class Socket extends SocketBase
     {
         $uid = $request->param('uid');
         $name = User::find($uid)->user_name;
-        $redis = new Redis();
+        $redis = new Redis(['password'=>config('database.password')]);
         $count = $redis->has('im_count');
         if (!$count) {
             $count = 0;
