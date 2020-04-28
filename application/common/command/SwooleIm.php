@@ -7,10 +7,9 @@ use Swoole\Redis\Server;
 use Swoole\WebSocket\Server as WebsocketServer;
 use Swoole\Coroutine\Redis;
 use Swoole\Coroutine;
-use think\Controller;
 
 
-class SwooleIm extends Controller
+class SwooleIm
 {
     public $server;
 
