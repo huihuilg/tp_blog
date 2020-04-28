@@ -7,9 +7,10 @@ use Swoole\Redis\Server;
 use Swoole\WebSocket\Server as WebsocketServer;
 use Swoole\Coroutine\Redis;
 use Swoole\Coroutine;
+use think\Controller;
 
 
-class SwooleIm
+class SwooleIm extends Controller
 {
     public $server;
 
@@ -46,7 +47,7 @@ class SwooleIm
             'host'     => '139.224.9.252',
             'port'     => 3306,
             'user'     => 'blog',
-            'password' => config('database.password'),
+            'password' =>18500253733,
             'database' => 'blog',
         ]);
         $redis = new Redis();
@@ -122,7 +123,7 @@ class SwooleIm
             'host'     => '139.224.9.252',
             'port'     => 3306,
             'user'     => 'blog',
-            'password' => config('database.password'),
+            'password' =>18500253733,
             'database' => 'blog',
         ]);
         $res = $swoole_mysql->query("update blog_user set is_online=0 where id=$uid");
